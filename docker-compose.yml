@@ -1,0 +1,44 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8082:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_USER: penggajian
+      DB_PASS: penggajian
+      DB_NAME: penggajian
+      APP_BASE_URL: http://localhost:8082/
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: penggajian
+      MARIADB_USER: penggajian
+      MARIADB_PASSWORD: penggajian
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/penggajian.sql:/docker-entrypoint-initdb.d/01-penggajian.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    ports:
+      - "8083:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+volumes:
+  db_data:
