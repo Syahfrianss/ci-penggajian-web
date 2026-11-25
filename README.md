@@ -10,7 +10,7 @@ dijalankan dengan Docker. Ada dua peran: admin dan pegawai.
 ## Menjalankan
 1. Clone repo:
    ```
-   git clone https://github.com/Syahfrianss/penggajian.git
+   git clone https://github.com/Syahfrianss/ci-penggajian-web.git
    cd penggajian
    ```
 2. Jalankan:
